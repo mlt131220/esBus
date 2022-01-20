@@ -7,7 +7,7 @@
 # Installation
 
 ```typescript
-npm install esBus -S
+npm install es-bus -S
 ```
 
 <br/>
@@ -17,7 +17,7 @@ npm install esBus -S
 ```typescript
 import { createApp } from 'vue'
 import App from './App.vue'
-import EsBus from 'esBus'
+import EsBus from 'es-bus'
 ```
 
 ### main.ts中注册实例
