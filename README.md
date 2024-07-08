@@ -42,9 +42,10 @@ $bus.bus("windowResize");
 
 /** 添加事件 add() */
 // 窗口大小改变响应
-$bus.add("windowResize", () => {
+function windowResize1(){
   console.log("窗口大小改变");
-})
+}
+$bus.add("windowResize", windowResize1)
 $bus.add("windowResize", () => {
   alert("窗口大小改变第二个事件");
 })
@@ -56,7 +57,10 @@ const onWindowResize = () => {
 window.addEventListener('resize', onWindowResize, false)
 
 /** 移除订阅 remove() */
-$bus.remove("windowResize")
+$bus.remove("windowResize",windowResize1)
+
+/** 清除订阅 clear() */
+$bus.clear("windowResize")
 ```
 
 <br/>

@@ -66,6 +66,28 @@ export default class Bus {
      * @param {string} name
      * @param {Function} listener
      * @memberof Bus
+     * @Description 订阅（监听事件）
+     */
+    on(name: string, listener?: Function): void {
+        //判断回收器中是否有提前添加的监听
+        if(this._BusCollector.length !== 0){
+            const busCollector = this._BusCollector.filter((collector,index) => { 
+                if(collector.name === name) {
+                    this._BusEvents.push({ name: name, listener: collector["listener"]});
+                    this._BusCollector.splice(index,1);
+                    return collector;
+                }
+            });
+            if(busCollector.length === 0) this._BusEvents.push({ name: name, listener: listener ? [listener] : [] });
+        }else{
+            this._BusEvents.push({ name: name, listener: listener ? [listener] : [] });
+        }
+    }
+
+    /**
+     * @param {string} name
+     * @param {Function} listener
+     * @memberof Bus
      * @Description 添加（监听事件）
      */
     add(name: string, listener: Function): void {
@@ -106,10 +128,34 @@ export default class Bus {
 
     /**
      * @param {string} name
+     * @param {Function} listener
      * @memberof Bus
      * @Description 移除订阅
      */
-    remove(name: string): void {
+    remove(name: string,listener: Function): void {
+        this._BusEvents = <BusEvent[]>this._BusEvents.map(BusEvent => { 
+            if(BusEvent.name === name) {
+                BusEvent.listener.splice(BusEvent.listener.findIndex(l => l === listener),1);
+                return BusEvent;
+            }
+        });
+    }
+
+    /**
+     * @param {string} name
+     * @memberof Bus
+     * @Description 清除订阅
+     */
+    clear(name: string): void {
         this._BusEvents = this._BusEvents.filter(BusEvent => BusEvent.name !== name);
+    }
+
+    /**
+     * @memberof Bus
+     * @Description 销毁
+     */
+    destory(): void {
+        this._BusEvents = new Array<BusEvent>();
+        this._BusCollector = new Array<BusEvent>();
     }
 }
